@@ -16,14 +16,13 @@ RUN subscription-manager repos --enable rhel-server-rhscl-7-rpms \
  && yum -y clean all --enablerepo='*'
  
 
-ENV BASH_ENV="/usr/bin/scl_enable" \
-    ENV="/usr/bin/scl_enable" \
-    PROMPT_COMMAND=". /usr/bin/scl_enable"
-     
-        
 RUN echo "unset BASH_ENV PROMPT_COMMAND ENV" > /usr/bin/scl_enable \
  && echo "source scl_source enable rh-git227" >> /usr/bin/scl_enable \
- && echo "source scl_source enable devtoolset-11" >> /usr/bin/scl_enable
+ && echo "source scl_source enable devtoolset-11" >> /usr/bin/scl_enable \
+ && chmod u+x /usr/bin/scl_enable
+ENV BASH_ENV="/usr/bin/scl_enable" \
+    ENV="/usr/bin/scl_enable" \
+    PROMPT_COMMAND=". /usr/bin/scl_enable"  
  
  
 ADD https://www.openssl.org/source/openssl-1.1.1q.tar.gz /home/openssl-1.1.1q.tar.gz
@@ -51,7 +50,4 @@ RUN source scl_source enable rh-git227 && source scl_source enable devtoolset-11
  ADD https://boostorg.jfrog.io/artifactory/main/release/1.74.0/source/boost_1_74_0.tar.gz /home/boost_1_74_0.tar.gz
 RUN cd /home  && tar xfz boost_1_74_0.tar.gz \
  && cp -r /home/boost_1_74_0/boost/ /usr/local/include/ \
- && rm /home/boost_1_74_0.tar.gz && rm -rf /home/boost_1_74_0
-
- 
- 
+ && rm /home/boost_1_74_0.tar.gz && rm -rf /home/boost_1_74_0 
